@@ -17,7 +17,11 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch(err => console.log(err));
 
-  const port = process.env.PORT || 5000;
 
+// Use Routes
+app.use('/api/admin', require('./routes/api/admin'));
+
+
+  const port = process.env.PORT || 5000;
   app.listen(port, () => console.log(`Server started on port ${port}`));
   
