@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const EspeceSchema = new Schema({
-_id: Schema.Types.ObjectId,
   name: {
     type: String,
     required: true

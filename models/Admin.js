@@ -3,10 +3,9 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const AdminSchema = new Schema({
-_id: Schema.Types.ObjectId,
 code: {
     type: String,
-    required: true
+    required: false
   },
   name: {
     type: String,
