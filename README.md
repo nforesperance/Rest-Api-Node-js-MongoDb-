@@ -9,5 +9,5 @@ Then run
 **npm run server**
 to start server
 
-##Note
+## Note
 Don't forget to change the MongoUri in the */config/keys.js*
