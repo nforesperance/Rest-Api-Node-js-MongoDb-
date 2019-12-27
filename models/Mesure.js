@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Capteur = require('./Capteur');
+const Parcelle = require('./Parcelle');
 
 // Create Schema
 const MesureSchema = new Schema({
@@ -22,13 +24,14 @@ const MesureSchema = new Schema({
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
-    unique:true
+    unique:false
   },
   capteur: {
     type: Schema.Types.ObjectId,
     ref: 'Capteur',
-    unique:true
+    unique:false
   },
 });
+
 
 module.exports = Mesure = mongoose.model('Mesure', MesureSchema);
