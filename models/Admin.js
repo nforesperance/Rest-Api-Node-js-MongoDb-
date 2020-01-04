@@ -41,7 +41,7 @@ code: {
     default: Date.now
   },
   statut: {
-    type: String,
+    type: Boolean,
     required: false,
 }
 });

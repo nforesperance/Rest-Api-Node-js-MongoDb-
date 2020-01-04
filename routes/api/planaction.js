@@ -2,29 +2,28 @@ const express = require('express');
 const router = express.Router();
 
 // Item Model
-const Action = require('../../models/action');
 const PlanAction = require('../../models/PlanActionneur');
+const Actionneur = require('../../models/Actionneur');
 const Parcelle = require('../../models/Parcelle');
 
 
-// @route   GET api/action
-// @desc    Get all action
+// @route   GET api/mesures
+// @desc    Get all mesures
 // @access  Public
 router.get('/', (req, res) => {
-    Action.find()
-      .populate('planactioneur')
+    PlanAction.find()
+      .populate('actionneur')
       .populate('parcelle')
-      .sort({ date: 1 })
+      .sort({ ate_creation: 1 })
       .then(data => res.json(data))
       .catch(err => console.log(err));
   });
- 
 
 // @route   GET api/mesure/id_mesure
 // @desc    Get one mesure
 // @access  Public
 router.get('/:id', (req, res) => {
-    Action.findById(req.params.id)
+    PlanAction.findById(req.params.id)
     .then(data => {
         if(!data) {
             return res.status(404).send({
@@ -45,37 +44,65 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// @route   GET api/mesure/all/id_parcelle
+// @route   GET api/mesure/parcelle/id_parcelle
 // @desc    Get all the mesure of one parcelle
 // @access  Public
-router.get('/all/:parcelle_id', (req, res) => {
+router.get('/parcelle/:parcelle_id', (req, res) => {
     Parcelle.findById(req.params.parcelle_id)
     .then(parcelle => {
-            Action.find({ parcelle: parcelle })
+            PlanAction.find({ parcelle: parcelle })
                 .then(data => {
                     res.json(data)                  
                 })
                 .catch(err =>{
                     res.status(404).send({
-                        message: err.message || "No Mesure found"
+                        message: err.message || "No planification found"
                     });
                 })
     })
     .catch(err => console.log(err))
 });
 
-//@route POST api/id_parcelle/id_parcelles
+// @route   GET api/mesure/actionneur/id_actionneur
+// @desc    Get all the mesure of one actionneur
+// @access  Public
+router.get('/actionneur/:actionneur_id', (req, res) => {
+    Actionneur.findById(req.params.actionneur_id)
+    .then(actionneur => {
+            PlanAction.find({ actionneur: actionneur })
+                .then(data => {
+                    res.json(data)                  
+                })
+                .catch(err =>{
+                    res.status(404).send({
+                        message: err.message || "No planification found"
+                    });
+                })
+    })
+    .catch(err => console.log(err))
+});
+
+
+//@route POST api/id_parcelle/id_capteurs
+//@desc save the mesures of one capteurs for a particular parcelle
 //@access Public
 router.post("/", (req, res) => {
-PlanAction.findById(req.body.planaction_id)
-        .then(planactionneur =>{
+Actionneur.findById(req.body.actionneur_id)
+        .then(actionneur =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
-                    const data = new Action({
-                        date: req.body.date,
-                        statut:req.body.statut,
-                        planactionneur:planactionneur,
-                        parcelle:parcelle,
+                    const data = new PlanAction({
+                        details: req.body.details,
+                        date_prochaine: req.body.date_prochaine,
+                        attribut_quatre: req.body.attribut_quatre,
+                        date_debut: req.body.date_debut,
+                        date_fin: req.body.date_fin,
+                        date_creation: req.body.date_creation,
+                        date_modefication: req.body.date_modefication,
+                        code_createur: req.body.code_createur,
+                        statut: req.body.statut,
+                        parcelle: parcelle,
+                        actionneur: actionneur,
                     });
                     data.save()
                         .then(data => {
@@ -91,16 +118,24 @@ PlanAction.findById(req.body.planaction_id)
             })
         .catch(err => res.status(404).json({ success: false }));
   });
-  router.post("/update/:id", (req, res) => {
-    PlanAction.findById(req.body.actionneur_id)
-        .then(planactionneur =>{
+
+router.post("/update/:id", (req, res) => {
+    Actionneur.findById(req.body.actionneur_id)
+        .then(actionneur =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
-                    Action.findByIdAndUpdate(req.params.id, {
-                        date: req.body.date,
-                        statut:req.body.statut,
-                        planactionneur:planactionneur,
-                        parcelle:parcelle,
+                    PlanAction.findByIdAndUpdate(req.params.id, {
+                        details: req.body.details,
+                        date_prochaine: req.body.date_prochaine,
+                        attribut_quatre: req.body.attribut_quatre,
+                        date_debut: req.body.date_debut,
+                        date_fin: req.body.date_fin,
+                        date_creation: req.body.date_creation,
+                        date_modefication: req.body.date_modefication,
+                        code_createur: req.body.code_createur,
+                        statut: req.body.statut,
+                        parcelle: parcelle,
+                        actionneur: actionneur,
                     }, {new: true})
                     .then(data => {
                         if(!data) {
@@ -132,7 +167,7 @@ PlanAction.findById(req.body.planaction_id)
 //@desc Delete mesures
 //@access Public
 router.delete("/:id", (req, res) => {
-    Action.findById(req.params.id)
+    PlanAction.findById(req.params.id)
       .then(data =>
         data
           .remove()

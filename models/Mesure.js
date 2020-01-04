@@ -18,9 +18,9 @@ const MesureSchema = new Schema({
     required: false,
   },
   statut: {
-    type: String,
+    type: Boolean,
     required: false,
-  },
+},
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',

@@ -45,9 +45,13 @@ router.get('/:id', (req, res) => {
 router.post("/", (req, res) => {
     const data = new Capteur({
       name: req.body.name,
-      type_grandeur:req.body.type,
-      description:req.body.desc,
-      effectif:req.body.effectif,
+      type_grandeur: req.body.type_grandeur,
+      description: req.body.description,
+      effectif: req.body.effectif,
+      date_creation: req.body.date_creation,
+      date_modefication: req.body.date_modefication,
+      code_createur: req.body.code_createur,
+      statut: req.body.statut,
     });
     data.save()
       .then(data => {
@@ -65,9 +69,13 @@ router.post("/", (req, res) => {
 router.post("/update/:id", (req, res) => {
         Capteur.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
-            type_grandeur:req.body.type,
-            description:req.body.desc,
-            effectif:req.body.effectif,
+            type_grandeur: req.body.type_grandeur,
+            description: req.body.description,
+            effectif: req.body.effectif,
+            date_creation: req.body.date_creation,
+            date_modefication: req.body.date_modefication,
+            code_createur: req.body.code_createur,
+            statut: req.body.statut,
         }, {new: true})
         .then(data => {
             if(!data) {

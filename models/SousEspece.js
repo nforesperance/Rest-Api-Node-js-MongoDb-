@@ -35,7 +35,7 @@ const SousSchema = new Schema({
     unique:true
   },
   statut: {
-    type: String,
+    type: Boolean,
     required: false,
 }
 });

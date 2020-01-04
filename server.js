@@ -26,6 +26,11 @@ app.use('/api/espece', require('./routes/api/espece'));
 app.use('/api/capteur', require('./routes/api/capteur'));
 app.use('/api/mesure', require('./routes/api/mesure'));
 app.use('/api/parcelle', require('./routes/api/parcelle'));
+app.use('/api/actionneur', require('./routes/api/actionneur'));
+app.use('/api/planaction', require('./routes/api/planaction'));
+app.use('/api/plancapteur', require('./routes/api/plancapteur'));
+app.use('/api/action', require('./routes/api/action'));
+app.use('/api/sousespece', require('./routes/api/sousespece'));
 
 
   const port = process.env.PORT || 5000;

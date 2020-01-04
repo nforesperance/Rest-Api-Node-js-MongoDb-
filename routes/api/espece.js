@@ -45,7 +45,11 @@ router.get('/:id', (req, res) => {
 router.post("/", (req, res) => {
     const data = new Espece({
       name: req.body.name,
-      description:req.body.desc,
+      description: req.body.description,
+      date_creation: req.body.date_creation,
+      date_modefication: req.body.date_modefication,
+      code_createur: req.body.code_createur,
+      statut: req.body.statut,      
     });
     data.save()
       .then(data => {
@@ -63,7 +67,11 @@ router.post("/", (req, res) => {
 router.post("/update/:id", (req, res) => {
         Espece.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
-            description:req.body.desc,
+            description: req.body.description,
+            date_creation: req.body.date_creation,
+            date_modefication: req.body.date_modefication,
+            code_createur: req.body.code_createur,
+            statut: req.body.statut,
         }, {new: true})
         .then(data => {
             if(!data) {

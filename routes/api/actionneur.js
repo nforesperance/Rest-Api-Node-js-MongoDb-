@@ -2,27 +2,27 @@ const express = require('express');
 const router = express.Router();
 
 // Item Model
-const Parcelle = require('../../models/Parcelle');
+const Actionneur = require('../../models/Actionneur');
 
-// @route   GET api/parcelle
-// @desc    Get All parcelle
+// @route   GET api/actionneur
+// @desc    Get All actionneur
 // @access  Public
 router.get('/', (req, res) => {
-  Parcelle.find()
-    .sort({ date_semis: 1 })
+  Actionneur.find()
+    .sort({ name: 1 })
     .then(data => res.json(data))
     .catch(err => console.log(err));
 });
 
-// @route   GET api/parcelle
-// @desc    Get one parcelle
+// @route   GET api/actionneur
+// @desc    Get one actionneur
 // @access  Public
 router.get('/:id', (req, res) => {
-    Parcelle.findById(req.params.id)
+    Actionneur.findById(req.params.id)
     .then(data => {
         if(!data) {
             return res.status(404).send({
-                message: "Parcelle not found with id " + req.params.id
+                message: "Actionneur not found with id " + req.params.id
             });            
         }
         res.json(data)
@@ -30,53 +30,53 @@ router.get('/:id', (req, res) => {
     .catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Parcelle not found with id " + req.params.id
+                message: "Actionneur not found with id " + req.params.id
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving parcelle with id " + req.params.id
+            message: "Error retrieving actionneur with id " + req.params.id
         });
     });
 });
 
-//@route POST api/parcelle
-//@desc Create an parcelle
+//@route POST api/actionneurs
+//@desc Create an actionneur
 //@access Public
 router.post("/", (req, res) => {
-    const data = new Parcelle({
-      location: req.body.location,
-      nombre_plant:req.body.nombre_plant,
-      date_semis: req.body.date_semis,
-      indice_crois: req.body.indice_crois,
-      indice_perf: req.body.indice_perf,
-      nombre_plant: req.body.nombre_plant,
-      date_creation: req.body.date_creation,
-      date_modefication: req.body.date_modefication,
+    const newActionneur = new Actionneur({
+      name: req.body.name,
+      type_grandeur: req.body.type_grandeur,
+      description: req.body.description,
+      effectif: req.body.effectif,
       code_createur: req.body.code_createur,
       statut: req.body.statut,
     });
-    data.save()
+    newActionneur.save()
       .then(data => {
         res.json(data);
       }).catch(err => {
           res.status(500).send({
-              message: err.message || "Some error occurred while creating the Parcelle."
+              message: err.message || "Some error occurred while creating the Actionneur."
           });
       });
   });
 
-//@route POST api/parcelles
-//@desc Create an parcelle
+//@route POST api/actionneurs
+//@desc Create an actionneur
 //@access Public
 router.post("/update/:id", (req, res) => {
-        Parcelle.findByIdAndUpdate(req.params.id, {
-            location: req.body.location,
-             nombre_plant:req.body.nombre_plant,
+        Actionneur.findByIdAndUpdate(req.params.id, {
+            name: req.body.name,
+            type_grandeur: req.body.type_grandeur,
+            description: req.body.description,
+            effectif: req.body.effectif,
+            code_createur: req.body.code_createur,
+            statut: req.body.statut,
         }, {new: true})
         .then(data => {
             if(!data) {
                 return res.status(404).send({
-                    message: "Parcelle not found with id " + req.params.id
+                    message: "Actionneur not found with id " + req.params.id
                 });
             }
             res.json(data);
@@ -84,20 +84,20 @@ router.post("/update/:id", (req, res) => {
         .catch(err => {
             if(err.kind === 'ObjectId') {
                 return res.status(404).send({
-                    message: "Parcelle not found with id " + req.params.id
+                    message: "Actionneur not found with id " + req.params.id
                 });                
             }
             return res.status(500).send({
-                message: "Error updating parcelle with id " + req.params.id
+                message: "Actionneur updating data with id " + req.params.id
             });
         });
   });
 
-//@route DELETE api/parcelle:id
-//@desc Delete an parcelle
+//@route DELETE api/actionneurs:id
+//@desc Delete an actionneur
 //@access Public
 router.delete("/:id", (req, res) => {
-    Parcelle.findById(req.params.id)
+    Actionneur.findById(req.params.id)
       .then(data =>
         data
           .remove()

@@ -96,6 +96,8 @@ Capteur.findById(req.params.capteur_id)
                     const data = new Mesure({
                         grandeur: req.body.grandeur,
                         valeur:req.body.valeur,
+                        date:req.body.date,
+                        statut:req.body.statut,
                         capteur:capteur,
                         parcelle:parcelle,
                     });

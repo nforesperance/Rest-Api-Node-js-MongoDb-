@@ -38,7 +38,7 @@ const PlanActionneurSchema = new Schema({
     unique: false
   },
   statut: {
-    type: String,
+    type: Boolean,
     required: false,
 },
   parcelle: {

@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Create Schema
-const ArrosageSchema = new Schema({
+const ActionSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
   },
   statut: {
-    type: String,
+    type: Boolean,
     required: false,
-  },
+},
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
@@ -22,4 +22,4 @@ const ArrosageSchema = new Schema({
   },
 });
 
-module.exports = Arrosage = mongoose.model('Arrosage', ArrosageSchema);
+module.exports = Arrosage = mongoose.model('Action', ActionSchema);

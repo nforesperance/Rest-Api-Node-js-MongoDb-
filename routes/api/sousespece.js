@@ -2,33 +2,32 @@ const express = require('express');
 const router = express.Router();
 
 // Item Model
-const Action = require('../../models/action');
-const PlanAction = require('../../models/PlanActionneur');
+const SousEspece = require('../../models/SousEspece');
+const Espece = require('../../models/Espece');
 const Parcelle = require('../../models/Parcelle');
 
 
-// @route   GET api/action
-// @desc    Get all action
+// @route   GET api/mesures
+// @desc    Get all mesures
 // @access  Public
 router.get('/', (req, res) => {
-    Action.find()
-      .populate('planactioneur')
+    SousEspece.find()
+      .populate('espece')
       .populate('parcelle')
-      .sort({ date: 1 })
+      .sort({ ate_creation: 1 })
       .then(data => res.json(data))
       .catch(err => console.log(err));
   });
- 
 
 // @route   GET api/mesure/id_mesure
 // @desc    Get one mesure
 // @access  Public
 router.get('/:id', (req, res) => {
-    Action.findById(req.params.id)
+    SousEspece.findById(req.params.id)
     .then(data => {
         if(!data) {
             return res.status(404).send({
-                message: "Mesure not found with id " + req.params.id
+                message: "data not found with id " + req.params.id
             });            
         }
         res.json(data)
@@ -36,46 +35,32 @@ router.get('/:id', (req, res) => {
     .catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Mesure not found with id " + req.params.id
+                message: "data not found with id " + req.params.id
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving Mesure with id " + req.params.id
+            message: "Error retrieving data with id " + req.params.id
         });
     });
 });
 
-// @route   GET api/mesure/all/id_parcelle
-// @desc    Get all the mesure of one parcelle
-// @access  Public
-router.get('/all/:parcelle_id', (req, res) => {
-    Parcelle.findById(req.params.parcelle_id)
-    .then(parcelle => {
-            Action.find({ parcelle: parcelle })
-                .then(data => {
-                    res.json(data)                  
-                })
-                .catch(err =>{
-                    res.status(404).send({
-                        message: err.message || "No Mesure found"
-                    });
-                })
-    })
-    .catch(err => console.log(err))
-});
-
-//@route POST api/id_parcelle/id_parcelles
+//@route POST api/id_parcelle/id_capteurs
+//@desc save the mesures of one capteurs for a particular parcelle
 //@access Public
 router.post("/", (req, res) => {
-PlanAction.findById(req.body.planaction_id)
-        .then(planactionneur =>{
+Espece.findById(req.body.espece_id)
+        .then(espece =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
-                    const data = new Action({
-                        date: req.body.date,
-                        statut:req.body.statut,
-                        planactionneur:planactionneur,
-                        parcelle:parcelle,
+                    const data = new SousEspece({
+                        name: req.body.name,
+                        description: req.body.description,
+                        date_creation: req.body.date_creation,
+                        date_modefication: req.body.date_modefication,
+                        code_createur: req.body.code_createur,
+                        statut: req.body.statut,
+                        parcelle: parcelle,
+                        espece: espece,
                     });
                     data.save()
                         .then(data => {
@@ -91,16 +76,21 @@ PlanAction.findById(req.body.planaction_id)
             })
         .catch(err => res.status(404).json({ success: false }));
   });
-  router.post("/update/:id", (req, res) => {
-    PlanAction.findById(req.body.actionneur_id)
-        .then(planactionneur =>{
+
+router.post("/update/:id", (req, res) => {
+    Espece.findById(req.body.espece_id)
+        .then(espece =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
-                    Action.findByIdAndUpdate(req.params.id, {
-                        date: req.body.date,
-                        statut:req.body.statut,
-                        planactionneur:planactionneur,
-                        parcelle:parcelle,
+                    SousEspece.findByIdAndUpdate(req.params.id, {
+                        dname: req.body.name,
+                        description: req.body.description,
+                        date_creation: req.body.date_creation,
+                        date_modefication: req.body.date_modefication,
+                        code_createur: req.body.code_createur,
+                        statut: req.body.statut,
+                        parcelle: parcelle,
+                        espece: espece,
                     }, {new: true})
                     .then(data => {
                         if(!data) {
@@ -132,7 +122,7 @@ PlanAction.findById(req.body.planaction_id)
 //@desc Delete mesures
 //@access Public
 router.delete("/:id", (req, res) => {
-    Action.findById(req.params.id)
+    SousEspece.findById(req.params.id)
       .then(data =>
         data
           .remove()

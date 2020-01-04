@@ -44,8 +44,16 @@ router.get('/:id', (req, res) => {
 //@access Public
 router.post("/", (req, res) => {
     const newAdmin = new Admin({
+      code: req.body.code,
       name: req.body.name,
-      addresse:req.body.addr,
+      addresse: req.body.addresse,
+      sexe: req.body.sexe,
+      date_naissance: req.body.date_naissance,
+      niveau: req.body.niveau,
+      code_createur: req.body.code_createur,
+      date_creation: req.body.date_creation,
+      date_modefication: req.body.date_modefication,
+      statut: req.body.statut,
     });
     newAdmin.save()
       .then(data => {
@@ -62,8 +70,16 @@ router.post("/", (req, res) => {
 //@access Public
 router.post("/update/:id", (req, res) => {
         Admin.findByIdAndUpdate(req.params.id, {
+            code: req.body.code,
             name: req.body.name,
-            addresse: req.body.addr
+            addresse: req.body.addresse,
+            sexe: req.body.sexe,
+            date_naissance: req.body.date_naissance,
+            niveau: req.body.niveau,
+            code_createur: req.body.code_createur,
+            date_creation: req.body.date_creation,
+            date_modefication: req.body.date_modefication,
+            statut: req.body.statut,
         }, {new: true})
         .then(admin => {
             if(!admin) {
