@@ -6,7 +6,7 @@ const PlanCapteurSchema = new Schema({
   
  details: {
     type: String,
-    required: true
+    required: false
   },
   date_prochaine: {
     type: Date,
@@ -14,7 +14,7 @@ const PlanCapteurSchema = new Schema({
   },
   attribut_quatre: {
     type: String,
-    required: true
+    required: false
   },
   date_debut: {
     type: Date,
@@ -48,12 +48,10 @@ const PlanCapteurSchema = new Schema({
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
-    unique:true
   },
   capteur: {
     type: Schema.Types.ObjectId,
     ref: 'Capteur',
-    unique:true
   },
 
 });

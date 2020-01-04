@@ -52,7 +52,7 @@ router.post("/", (req, res) => {
       niveau: req.body.niveau,
       code_createur: req.body.code_createur,
       date_creation: req.body.date_creation,
-      date_modefication: req.body.date_modefication,
+      date_modification: req.body.date_modification,
       statut: req.body.statut,
     });
     newAdmin.save()
@@ -78,7 +78,7 @@ router.post("/update/:id", (req, res) => {
             niveau: req.body.niveau,
             code_createur: req.body.code_createur,
             date_creation: req.body.date_creation,
-            date_modefication: req.body.date_modefication,
+            date_modification: req.body.date_modification,
             statut: req.body.statut,
         }, {new: true})
         .then(admin => {

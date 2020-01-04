@@ -106,32 +106,38 @@ router.get('/admin/:admin_id', (req, res) => {
 //@desc save the mesures of one capteurs for a particular parcelle
 //@access Public
 router.post("/", (req, res) => {
-    Actionneur.findById(req.body.actionneur_id)
-            .then(actionneur =>{
+    Capteur.findById(req.body.capteur_id)
+            .then(capteur =>{
                 Parcelle.findById(req.body.parcelle_id)
                     .then(parcelle => {
-                        const data = new PlanCapteur({
-                            details: req.body.details,
-                            date_prochaine: req.body.date_prochaine,
-                            attribut_quatre: req.body.attribut_quatre,
-                            date_debut: req.body.date_debut,
-                            date_fin: req.body.date_fin,
-                            date_creation: req.body.date_creation,
-                            date_modefication: req.body.date_modefication,
-                            code_createur: req.body.code_createur,
-                            statut: req.body.statut,
-                            parcelle: parcelle,
-                            actionneur: actionneur,
-                        });
-                        data.save()
-                            .then(data => {
-                            res.json(data);
-                            })
-                            .catch(err => {
-                                res.status(500).send({
-                                    message: err.message || "Some error occurred while creating the Mesure."
+                        Admin.findById(req.body.admin_id)
+                            .then(admin =>{
+                                const data = new PlanCapteur({
+                                    details: req.body.details,
+                                    date_prochaine: req.body.date_prochaine,
+                                    attribut_quatre: req.body.attribut_quatre,
+                                    date_debut: req.body.date_debut,
+                                    date_fin: req.body.date_fin,
+                                    date_creation: req.body.date_creation,
+                                    date_modefication: req.body.date_modefication,
+                                    code_createur: req.body.code_createur,
+                                    statut: req.body.statut,
+                                    parcelle: parcelle,
+                                    capteur: capteur,
+                                    admin:admin,
                                 });
-                            });
+                                data.save()
+                                    .then(data => {
+                                    res.json(data);
+                                    })
+                                    .catch(err => {
+                                        res.status(500).send({
+                                            message: err.message || "Some error occurred while creating the Mesure."
+                                        });
+                                    });
+                            })
+                            .catch(err => res.status(404).json({ success: false }));
+                        
                     })
                     .catch(err => res.status(404).json({ success: false }));
                 })

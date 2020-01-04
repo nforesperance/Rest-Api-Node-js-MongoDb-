@@ -49,9 +49,8 @@ router.post("/", (req, res) => {
       date_semis: req.body.date_semis,
       indice_crois: req.body.indice_crois,
       indice_perf: req.body.indice_perf,
-      nombre_plant: req.body.nombre_plant,
       date_creation: req.body.date_creation,
-      date_modefication: req.body.date_modefication,
+      date_modification: req.body.date_modefication,
       code_createur: req.body.code_createur,
       statut: req.body.statut,
     });
@@ -71,7 +70,14 @@ router.post("/", (req, res) => {
 router.post("/update/:id", (req, res) => {
         Parcelle.findByIdAndUpdate(req.params.id, {
             location: req.body.location,
-             nombre_plant:req.body.nombre_plant,
+            nombre_plant:req.body.nombre_plant,
+            date_semis: req.body.date_semis,
+            indice_crois: req.body.indice_crois,
+            indice_perf: req.body.indice_perf,
+            date_creation: req.body.date_creation,
+            date_modefication: req.body.date_modification,
+            code_createur: req.body.code_createur,
+            statut: req.body.statut,
         }, {new: true})
         .then(data => {
             if(!data) {

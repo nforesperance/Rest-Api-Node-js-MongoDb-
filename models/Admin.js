@@ -36,7 +36,7 @@ code: {
     type: Date,
     default: Date.now
   },
-  date_modefication: {
+  date_modification: {
     type: Date,
     default: Date.now
   },

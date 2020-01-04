@@ -28,7 +28,7 @@ const PlanActionneurSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  date_modefication: {
+  date_modification: {
     type: Date,
     default: Date.now
   },
@@ -44,12 +44,10 @@ const PlanActionneurSchema = new Schema({
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
-    unique:true
   },
   actionneur: {
     type: Schema.Types.ObjectId,
     ref: 'Actionneur',
-    unique:true
   },
 
 });

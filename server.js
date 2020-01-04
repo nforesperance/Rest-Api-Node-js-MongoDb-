@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const config = require('config');
-
+const test = require('./test')
 const app = express();
 var cors = require('cors');
 // Bodyparser Middleware
@@ -36,3 +36,8 @@ app.use('/api/sousespece', require('./routes/api/sousespece'));
   const port = process.env.PORT || 5000;
   app.listen(port, () => console.log(`Server started on port ${port}`));
   
+  if(process.argv[2]=="fake"){
+    for (let i = 0; i < 10; i++) {
+      test.test(10,i)
+    }
+  }

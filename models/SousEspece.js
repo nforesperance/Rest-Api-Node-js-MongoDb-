@@ -10,20 +10,18 @@ const SousSchema = new Schema({
   description: {
     type: String,
     required: false,
-    unique: true
   },
   date_creation: {
     type: Date,
     default: Date.now
   },
-  date_modefication: {
+  date_modification: {
     type: Date,
     default: Date.now
   },
   code_createur: {
     type: String,
     required: false,
-    unique: false
   },
   espece: {
     type: Schema.Types.ObjectId,
@@ -32,7 +30,6 @@ const SousSchema = new Schema({
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
-    unique:true
   },
   statut: {
     type: Boolean,

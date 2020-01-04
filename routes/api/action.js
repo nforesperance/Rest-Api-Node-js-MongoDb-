@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Item Model
-const Action = require('../../models/action');
+const Action = require('../../models/Action');
 const PlanAction = require('../../models/PlanActionneur');
 const Parcelle = require('../../models/Parcelle');
 
@@ -68,13 +68,13 @@ router.get('/all/:parcelle_id', (req, res) => {
 //@access Public
 router.post("/", (req, res) => {
 PlanAction.findById(req.body.planaction_id)
-        .then(planactionneur =>{
+        .then(planactioneur =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
                     const data = new Action({
                         date: req.body.date,
                         statut:req.body.statut,
-                        planactionneur:planactionneur,
+                        planactioneur:planactioneur,
                         parcelle:parcelle,
                     });
                     data.save()
@@ -93,13 +93,13 @@ PlanAction.findById(req.body.planaction_id)
   });
   router.post("/update/:id", (req, res) => {
     PlanAction.findById(req.body.actionneur_id)
-        .then(planactionneur =>{
+        .then(planactioneur =>{
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
                     Action.findByIdAndUpdate(req.params.id, {
                         date: req.body.date,
                         statut:req.body.statut,
-                        planactionneur:planactionneur,
+                        planactioneur:planactioneur,
                         parcelle:parcelle,
                     }, {new: true})
                     .then(data => {

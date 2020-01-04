@@ -14,7 +14,6 @@ const ActionSchema = new Schema({
   parcelle: {
     type: Schema.Types.ObjectId,
     ref: 'Parcelle',
-    unique:true
   },
   planactioneur: {
     type: Schema.Types.ObjectId,

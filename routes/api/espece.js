@@ -47,7 +47,7 @@ router.post("/", (req, res) => {
       name: req.body.name,
       description: req.body.description,
       date_creation: req.body.date_creation,
-      date_modefication: req.body.date_modefication,
+      date_modification: req.body.date_modification,
       code_createur: req.body.code_createur,
       statut: req.body.statut,      
     });
@@ -69,7 +69,7 @@ router.post("/update/:id", (req, res) => {
             name: req.body.name,
             description: req.body.description,
             date_creation: req.body.date_creation,
-            date_modefication: req.body.date_modefication,
+            date_modification: req.body.date_modification,
             code_createur: req.body.code_createur,
             statut: req.body.statut,
         }, {new: true})
