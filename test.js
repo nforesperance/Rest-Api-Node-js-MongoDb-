@@ -71,16 +71,22 @@ function test(n,x) {
     }
     if(x==5){
         for (let i = 0; i < n; i++) {
-            const newAdmin = new Parcelle({
-                indice_crois: 10,
-                indice_perf: 10,
-                nombre_plant: 10,
-                code_createur: str,
-                statut: true,
-              });
-              newAdmin.save() 
-              .then(x =>console.log(x)
-              ) .catch(err =>console.log(err))    
+            Espece.findOne({statut:true})
+                .then(espece => {
+                    const newAdmin = new Parcelle({
+                        indice_crois: 10,
+                        indice_perf: 10,
+                        nombre_plant: 10,
+                        code_createur: str,
+                        statut: true,
+                        espece:espece
+                      });
+                      newAdmin.save() 
+                      .then(x =>console.log(x)
+                      ) .catch(err =>console.log(err)) 
+                
+                })
+                .catch(err => console.log(err))   
         }
     }
     if(x==6){

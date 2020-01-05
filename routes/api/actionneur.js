@@ -64,7 +64,7 @@ router.post("/", (req, res) => {
 //@route POST api/actionneurs
 //@desc Create an actionneur
 //@access Public
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
         Actionneur.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             type_grandeur: req.body.type_grandeur,

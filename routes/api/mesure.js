@@ -116,8 +116,36 @@ Capteur.findById(req.params.capteur_id)
         .catch(err => res.status(404).json({ success: false }));
   });
 
-// router.post("/update//:parcelle_id/:capteur_id", (req, res) => {
-//   });
+//@route POST api/admins
+//@desc Create an admin
+//@access Public
+router.put("/:id", (req, res) => {
+    Capteur.findById(req.body.capteur_id)
+        .then(capteur =>{
+            Parcelle.findById(req.body.parcelle_id)
+                .then(parcelle => {
+                    const data = new Mesure({
+                        grandeur: req.body.grandeur,
+                        valeur:req.body.valeur,
+                        date:req.body.date,
+                        statut:req.body.statut,
+                        capteur:capteur,
+                        parcelle:parcelle,
+                    });
+                    data.save()
+                        .then(data => {
+                        res.json(data);
+                        })
+                        .catch(err => {
+                            res.status(500).send({
+                                message: err.message || "Some error occurred while creating the Mesure."
+                            });
+                        });
+                })
+                .catch(err => res.status(404).json({ success: false }));
+            })
+        .catch(err => res.status(404).json({ success: false }));
+});
 
 //@route DELETE api/mesures:id
 //@desc Delete mesures

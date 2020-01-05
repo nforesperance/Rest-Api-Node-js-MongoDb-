@@ -77,7 +77,7 @@ Espece.findById(req.body.espece_id)
         .catch(err => res.status(404).json({ success: false }));
   });
 
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Espece.findById(req.body.espece_id)
         .then(espece =>{
             Parcelle.findById(req.body.parcelle_id)

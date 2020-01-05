@@ -119,7 +119,7 @@ Actionneur.findById(req.body.actionneur_id)
         .catch(err => res.status(404).json({ success: false }));
   });
 
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Actionneur.findById(req.body.actionneur_id)
         .then(actionneur =>{
             Parcelle.findById(req.body.parcelle_id)

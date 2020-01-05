@@ -64,7 +64,7 @@ router.post("/", (req, res) => {
 //@route POST api/admins
 //@desc Create an admin
 //@access Public
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
         Espece.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             description: req.body.description,
