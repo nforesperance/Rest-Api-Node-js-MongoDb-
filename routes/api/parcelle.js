@@ -46,7 +46,7 @@ router.get('/:id', (req, res) => {
 //@desc Create an parcelle
 //@access Public
 router.post("/", (req, res) => {
-    Espece.findById(req.body.espece_is)
+    Espece.findById(req.body.espece)
         .then(espece =>{
             const data = new Parcelle({
                 location: req.body.location,
@@ -78,7 +78,7 @@ router.post("/", (req, res) => {
 //@desc Create an parcelle
 //@access Public
 router.put("/:id", (req, res) => {
-    Espece.findById(req.body.espece_is)
+    Espece.findById(req.body.espece)
         .then(espece =>{
             Parcelle.findByIdAndUpdate(req.params.id, {
                 location: req.body.location,
