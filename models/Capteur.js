@@ -16,14 +16,14 @@ const CapteurSchema = new Schema({
     required: false,
   },
   effectif: {
-    type: String,
+    type: Number,
     required: false,
   },
   date_creation: {
     type: Date,
     default: Date.now
   },
-  date_modefication: {
+  date_modification: {
     type: Date,
     default: Date.now
   },

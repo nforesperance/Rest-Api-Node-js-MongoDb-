@@ -66,7 +66,7 @@ router.post("/", (req, res) => {
 //@route POST api/capteur
 //@desc Create an capteur
 //@access Public
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
         Capteur.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             type_grandeur: req.body.type_grandeur,
