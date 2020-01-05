@@ -68,7 +68,7 @@ router.post("/", (req, res) => {
 //@route POST api/admins
 //@desc Create an admin
 //@access Public
-router.post("/update/:id", (req, res) => {
+router.put("/update/:id", (req, res) => {
         Admin.findByIdAndUpdate(req.params.id, {
             code: req.body.code,
             name: req.body.name,

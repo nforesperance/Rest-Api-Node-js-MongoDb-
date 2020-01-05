@@ -44,7 +44,13 @@ const ParcelleSchema = new Schema({
     statut: {
         type: Boolean,
         required: false,
-    }
+    },
+ espece: {
+        type: Schema.Types.ObjectId,
+        ref: 'Espece',
+        unique:false
+      },
+    
 });
 
 module.exports = Parcelle = mongoose.model('Parcelle', ParcelleSchema);

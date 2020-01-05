@@ -145,7 +145,7 @@ router.post("/", (req, res) => {
       });
     
 
-router.post("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Actionneur.findById(req.body.actionneur_id)
         .then(actionneur =>{
             Parcelle.findById(req.body.parcelle_id)
