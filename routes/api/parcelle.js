@@ -10,6 +10,7 @@ const Espece = require('../../models/Espece');
 // @access  Public
 router.get('/', (req, res) => {
   Parcelle.find()
+    .populate('espece')
     .sort({ date_semis: 1 })
     .then(data => res.json(data))
     .catch(err => console.log(err));
@@ -20,6 +21,7 @@ router.get('/', (req, res) => {
 // @access  Public
 router.get('/:id', (req, res) => {
     Parcelle.findById(req.params.id)
+    .populate('espece')
     .then(data => {
         if(!data) {
             return res.status(404).send({
