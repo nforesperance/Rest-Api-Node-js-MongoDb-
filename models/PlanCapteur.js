@@ -12,8 +12,8 @@ const PlanCapteurSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  attribut_quatre: {
-    type: String,
+  type: {
+    type: Number,
     required: false
   },
   date_debut: {

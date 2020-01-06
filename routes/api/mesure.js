@@ -7,16 +7,29 @@ const Capteur = require('../../models/Capteur');
 const Parcelle = require('../../models/Parcelle');
 
 
+
+
 // @route   GET api/mesures
 // @desc    Get all mesures
 // @access  Public
 router.get('/', (req, res) => {
+    
     Mesure.find()
       .populate('capteur')
       .populate('parcelle')
       .sort({ name: 1 })
-      .then(data => res.json(data))
-      .catch(err => console.log(err));
+      .then(data => 
+        
+        {Mesure.deepPopulate(data,'parcelle.espece')
+        .then(
+
+
+
+        )
+        
+        .then( data=>res.json(data)) })
+      
+     .catch(err => console.log(err));
   });
  
 // @route   GET api/mesures/latest
@@ -89,9 +102,9 @@ router.get('/all/:capteur_id', (req, res) => {
 //@desc save the mesures of one capteurs for a particular parcelle
 //@access Public
 router.post("/:parcelle_id/:capteur_id", (req, res) => {
-Capteur.findById(req.params.capteur_id)
+Capteur.findById(req.body.capteur_id)
         .then(capteur =>{
-            Parcelle.findById(req.params.parcelle_id)
+            Parcelle.findById(req.body.parcelle._id)
                 .then(parcelle => {
                     const data = new Mesure({
                         grandeur: req.body.grandeur,
@@ -115,6 +128,35 @@ Capteur.findById(req.params.capteur_id)
             })
         .catch(err => res.status(404).json({ success: false }));
   });
+
+
+  router.post("/",(req, res) => {
+    Capteur.findById(req.body.capteur._id)
+            .then(capteur =>{
+                Parcelle.findById(req.body.parcelle._id)
+                    .then(parcelle => {
+                        const data = new Mesure({
+                            grandeur: req.body.grandeur,
+                            valeur:req.body.valeur,
+                            date:req.body.date,
+                            statut:req.body.statut,
+                            capteur:capteur._id,
+                            parcelle:parcelle._id,
+                        });
+                        data.save()
+                            .then(data => {
+                            res.json(data);
+                            })
+                            .catch(err => {
+                                res.status(500).send({
+                                    message: err.message || "Some error occurred while creating the Mesure."
+                                });
+                            });
+                    })
+                    .catch(err => res.status(404).json({ success: false }));
+                })
+            .catch(err => res.status(404).json({ success: false }));
+      });
 
 //@route POST api/admins
 //@desc Create an admin

@@ -5,6 +5,9 @@ const router = express.Router();
 const Parcelle = require('../../models/Parcelle');
 const Espece = require('../../models/Espece');
 
+
+
+
 // @route   GET api/parcelle
 // @desc    Get All parcelle
 // @access  Public
@@ -12,7 +15,7 @@ router.get('/', (req, res) => {
   Parcelle.find()
     .populate('espece')
     .sort({ date_semis: 1 })
-    .then(data => res.json(data))
+    .then(data => res.json((data)))
     .catch(err => console.log(err));
 });
 
@@ -46,7 +49,7 @@ router.get('/:id', (req, res) => {
 //@desc Create an parcelle
 //@access Public
 router.post("/", (req, res) => {
-    Espece.findById(req.body.espece)
+    Espece.findById(req.body.espece._id)
         .then(espece =>{
             const data = new Parcelle({
                 location: req.body.location,
@@ -58,7 +61,7 @@ router.post("/", (req, res) => {
                 date_modification: req.body.date_modefication,
                 code_createur: req.body.code_createur,
                 statut: req.body.statut,
-                espece:espece
+                espece:espece._id
               });
               data.save()
                 .then(data => {
