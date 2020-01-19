@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const dateComparator=require('compare-dates');
 
 // Item Model
 const PlanCapteur = require('../../models/PlanCapteur');
@@ -12,37 +13,62 @@ const Admin = require('../../models/Admin');
 // @desc    Get all mesures
 // @access  Public
 router.get('/', (req, res) => {
+    
     PlanCapteur.find()
-      .populate('actionneur')
-      .populate('parcelle')
-      .sort({ ate_creation: 1 })
-      .then(data => res.json(data))
-      .catch(err => console.log(err));
-  });
+        .populate('actionneur')
+        .populate('parcelle')
+        .sort({ date_creation: 1 })
+        .then(data => res.json(data))
+        .catch(err => console.log(err));
+});
+
+
+
+router.get('/:frequency', (req, res) => {
+
+    currentTime =new Date()
+    startTime=new Date();start.setHours(start.getHours()-frequency);
+
+    let query={date_prochaine:{$gt:startTime,$lt:currentTime}}
+    PlanCapteur.find()
+        .where('statut').equals(true)
+        .where('date_prochaine')
+        .populate('actionneur')
+        .populate('parcelle')
+        .then(data => res.json(data))
+        .catch(err => console.log(err));
+
+
+
+
+
+
+
+});
 
 // @route   GET api/mesure/id_mesure
 // @desc    Get one mesure
 // @access  Public
 router.get('/:id', (req, res) => {
     PlanCapteur.findById(req.params.id)
-    .then(data => {
-        if(!data) {
-            return res.status(404).send({
-                message: "data not found with id " + req.params.id
-            });            
-        }
-        res.json(data)
-    })
-    .catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "data not found with id " + req.params.id
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving Mesure with id " + req.params.id
+        .then(data => {
+            if (!data) {
+                return res.status(404).send({
+                    message: "data not found with id " + req.params.id
+                });
+            }
+            res.json(data)
+        })
+        .catch(err => {
+            if (err.kind === 'ObjectId') {
+                return res.status(404).send({
+                    message: "data not found with id " + req.params.id
+                });
+            }
+            return res.status(500).send({
+                message: "Error retrieving Mesure with id " + req.params.id
+            });
         });
-    });
 });
 
 // @route   GET api/mesure/parcelle/id_parcelle
@@ -50,18 +76,18 @@ router.get('/:id', (req, res) => {
 // @access  Public
 router.get('/parcelle/:parcelle_id', (req, res) => {
     Parcelle.findById(req.params.parcelle_id)
-    .then(parcelle => {
+        .then(parcelle => {
             PlanCapteur.find({ parcelle: parcelle })
                 .then(data => {
-                    res.json(data)                  
+                    res.json(data)
                 })
-                .catch(err =>{
+                .catch(err => {
                     res.status(404).send({
                         message: err.message || "No planification found"
                     });
                 })
-    })
-    .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
 });
 
 // @route   GET api/mesure/actionneur/id_capteur
@@ -69,18 +95,18 @@ router.get('/parcelle/:parcelle_id', (req, res) => {
 // @access  Public
 router.get('/capteur/:capteur_id', (req, res) => {
     Capteur.findById(req.params.capteur_id)
-    .then(capteur => {
+        .then(capteur => {
             PlanCapteur.find({ capteur: capteur })
                 .then(data => {
-                    res.json(data)                  
+                    res.json(data)
                 })
-                .catch(err =>{
+                .catch(err => {
                     res.status(404).send({
                         message: err.message || "No planification found"
                     });
                 })
-    })
-    .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
 });
 
 // @route   GET api/mesure/actionneur/id_admin
@@ -88,18 +114,18 @@ router.get('/capteur/:capteur_id', (req, res) => {
 // @access  Public
 router.get('/admin/:admin_id', (req, res) => {
     Admin.findById(req.params.admin_id)
-    .then(admin => {
+        .then(admin => {
             PlanCapteur.find({ admin: admin })
                 .then(data => {
-                    res.json(data)                  
+                    res.json(data)
                 })
-                .catch(err =>{
+                .catch(err => {
                     res.status(404).send({
                         message: err.message || "No planification found"
                     });
                 })
-    })
-    .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
 });
 
 //@route POST api/id_parcelle/id_capteurs
@@ -107,51 +133,51 @@ router.get('/admin/:admin_id', (req, res) => {
 //@access Public
 router.post("/", (req, res) => {
     Capteur.findById(req.body.capteur_id)
-            .then(capteur =>{
-                Parcelle.findById(req.body.parcelle_id)
-                    .then(parcelle => {
-                        Admin.findById(req.body.admin_id)
-                            .then(admin =>{
-                                const data = new PlanCapteur({
-                                    details: req.body.details,
-                                    date_prochaine: req.body.date_prochaine,
-                                    attribut_quatre: req.body.attribut_quatre,
-                                    date_debut: req.body.date_debut,
-                                    date_fin: req.body.date_fin,
-                                    date_creation: req.body.date_creation,
-                                    date_modefication: req.body.date_modefication,
-                                    code_createur: req.body.code_createur,
-                                    statut: req.body.statut,
-                                    parcelle: parcelle,
-                                    capteur: capteur,
-                                    admin:admin,
-                                });
-                                data.save()
-                                    .then(data => {
-                                    res.json(data);
-                                    })
-                                    .catch(err => {
-                                        res.status(500).send({
-                                            message: err.message || "Some error occurred while creating the Mesure."
-                                        });
-                                    });
-                            })
-                            .catch(err => res.status(404).json({ success: false }));
-                        
-                    })
-                    .catch(err => res.status(404).json({ success: false }));
-                })
-            .catch(err => res.status(404).json({ success: false }));
-      });
-    
-
-router.put("/:id", (req, res) => {
-    Actionneur.findById(req.body.actionneur_id)
-        .then(actionneur =>{
+        .then(capteur => {
             Parcelle.findById(req.body.parcelle_id)
                 .then(parcelle => {
                     Admin.findById(req.body.admin_id)
-                        .then(admin =>{
+                        .then(admin => {
+                            const data = new PlanCapteur({
+                                details: req.body.details,
+                                date_prochaine: req.body.date_prochaine,
+                                attribut_quatre: req.body.attribut_quatre,
+                                date_debut: req.body.date_debut,
+                                date_fin: req.body.date_fin,
+                                date_creation: req.body.date_creation,
+                                date_modefication: req.body.date_modefication,
+                                code_createur: req.body.code_createur,
+                                statut: req.body.statut,
+                                parcelle: parcelle,
+                                capteur: capteur,
+                                admin: admin,
+                            });
+                            data.save()
+                                .then(data => {
+                                    res.json(data);
+                                })
+                                .catch(err => {
+                                    res.status(500).send({
+                                        message: err.message || "Some error occurred while creating the Mesure."
+                                    });
+                                });
+                        })
+                        .catch(err => res.status(404).json({ success: false }));
+
+                })
+                .catch(err => res.status(404).json({ success: false }));
+        })
+        .catch(err => res.status(404).json({ success: false }));
+});
+
+
+router.put("/:id", (req, res) => {
+    Actionneur.findById(req.body.actionneur_id)
+        .then(actionneur => {
+            Parcelle.findById(req.body.parcelle_id)
+                .then(parcelle => {
+                    Admin.findById(req.body.admin_id)
+                        .then(admin => {
                             PlanCapteur.findByIdAndUpdate(req.params.id, {
                                 details: req.body.details,
                                 date_prochaine: req.body.date_prochaine,
@@ -164,47 +190,47 @@ router.put("/:id", (req, res) => {
                                 statut: req.body.statut,
                                 parcelle: parcelle,
                                 actionneur: actionneur,
-                                admin:admin
-                            }, {new: true})
-                            .then(data => {
-                                if(!data) {
-                                    return res.status(404).send({
-                                        message: "data not found with id " + req.params.id
+                                admin: admin
+                            }, { new: true })
+                                .then(data => {
+                                    if (!data) {
+                                        return res.status(404).send({
+                                            message: "data not found with id " + req.params.id
+                                        });
+                                    }
+                                    res.json(data);
+                                })
+                                .catch(err => {
+                                    if (err.kind === 'ObjectId') {
+                                        return res.status(404).send({
+                                            message: "data not found with id " + req.params.id
+                                        });
+                                    }
+                                    return res.status(500).send({
+                                        message: "Error updating data with id " + req.params.id
                                     });
-                                }
-                                res.json(data);
-                            })
-                            .catch(err => {
-                                if(err.kind === 'ObjectId') {
-                                    return res.status(404).send({
-                                        message: "data not found with id " + req.params.id
-                                    });                
-                                }
-                                return res.status(500).send({
-                                    message: "Error updating data with id " + req.params.id
                                 });
-                            });
                         })
-                        })
-                   
+                })
+
                 .catch(err => res.status(404).json({ success: false }));
-                
-            })
+
+        })
         .catch(err => res.status(404).json({ success: false }));
-    
-  });
+
+});
 
 //@route DELETE api/mesures:id
 //@desc Delete mesures
 //@access Public
 router.delete("/:id", (req, res) => {
     PlanCapteur.findById(req.params.id)
-      .then(data =>
-        data
-          .remove()
-          .then(data => res.json(data))
-          .catch(err => res.json({ success: false }))
-      )
-      .catch(err => res.status(404).json({ success: false }));
-  });
+        .then(data =>
+            data
+                .remove()
+                .then(data => res.json(data))
+                .catch(err => res.json({ success: false }))
+        )
+        .catch(err => res.status(404).json({ success: false }));
+});
 module.exports = router;

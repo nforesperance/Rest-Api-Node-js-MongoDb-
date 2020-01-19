@@ -16,7 +16,7 @@ const ActionneurSchema = new Schema({
     required: false,
   },
   effectif: {
-    type: String,
+    type: String, 
     required: false,
   },
   date_creation: {
